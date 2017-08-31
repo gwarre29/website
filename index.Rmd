@@ -13,6 +13,7 @@ For a paragraph, just type normally
 
 column 1 | column 2
 --- | ---
-phillies | national
-Yankees | American
+eagles | NFC
+steelers | AFC
+panthers | AFC
 <img src="horse.jpg" width="300" />
