@@ -12,11 +12,66 @@ library(Lahman)
 library(sqldf)
 ```
 
+
 Suppose we want to see the homerun totals for the 1927 Yankees. We could write the following:
+
 
 ```{r}
 query<-"SELECT playerID,yearID,teamID,HR FROM Batting
 WHERE teamID='NYA'and yearID=1927"
 sqldf(query)
 ```
+
+
+This query identifies players on the NY Yankees team who have hit 40 or more homeruns and had less than 60 strike outs
+
+
+```{r}
+query<-"SELECT playerID,teamID,yearID,HR FROM Batting
+WHERE teamID='NYA' and HR>=40 and SO<60"
+sqldf(query)
+```
+
+
+This query broadens the search to players, on any team in the MLB, who have more than 40 homeruns and less than 60 strikeouts
+
+
+```{r}
+query<-"SELECT playerID,teamID,yearID,HR,SO FROM Batting
+WHERE HR>40 and SO<60"
+sqldf(query)
+```
+
+
+This query retrains the search to players on the Phillies team who have more than 30 homeruns during the 70s
+
+
+```{r}
+query<-"SELECT playerID,teamID,yearID,HR FROM Batting
+WHERE teamID='PHI' and HR>30 and yearID<=1979 and yearID>=1970"
+sqldf(query)
+```
+
+
+This query again widens the search to players, in desceding order, who have more than 50 homeruns
+
+
+```{r}
+query<-"SELECT playerID, yearID, teamID,HR FROM Batting
+WHERE HR>50
+ORDER BY HR DESC"
+sqldf(query)
+```
+
+
+This query identified players, on any team in the MLB, that have had a season with at least 400 at bats and less than 10 strikeouts. In this case, it is in ascending order from those with the least strikeouts to the most.
+
+
+```{r}
+query<-"SELECT playerID,yearID,teamID,SO,AB FROM Batting
+WHERE SO<10 and AB>=400
+ORDER BY SO"
+sqldf(query)
+```
+
 
