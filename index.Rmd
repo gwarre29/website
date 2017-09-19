@@ -52,6 +52,8 @@ WHERE teamID='PHI' and HR>30 and yearID<=1979 and yearID>=1970"
 sqldf(query)
 ```
 
+#------------------------------------------------------------------------
+
 ## Ordering Data Outputs
 
 This query again widens the search to players, in desceding order, who have more than 50 homeruns
@@ -75,4 +77,61 @@ ORDER BY SO"
 sqldf(query)
 ```
 
+#------------------------------------------------------------------------
+
+
+##Aggregation
+
+```{r}
+query<-"SELECT playerID, sum(HR) FROM Batting
+WHERE playerID= 'ruthba01'
+GROUP BY playerID"
+sqldf(query)
+```
+
+```{r}
+query<-"SELECT playerID, sum(HR) From Batting
+GROUP BY playerID
+HAVING sum(HR)>600
+ORDER BY sum(HR) DESC"
+sqldf(query)
+```
+
+```{r}
+query<-"SELECT playerID, avg(HR) From Batting
+GROUP BY playerID
+HAVING avg(HR)>30
+ORDER BY avg(HR) DESC"
+sqldf(query)
+```
+
+#------------------------------------------------------------------------
+
+
+## Joins
+
+```{r}
+query<-"SELECT nameFirst,nameLast,yearID,teamID,HR 
+FROM Batting INNER JOIN Master
+ON BATTING.playerID=Master.playerID
+WHERE Batting.playerID= 'ruthba01'"
+sqldf(query)
+```
+
+```{r}
+query<-"SELECT nameFirst,nameLast,yearID,teamID,HR
+FROM Batting INNER JOIN Master
+ON BATTING.playerID=Master.playerID
+WHERE Batting.HR>50
+ORDER BY HR DESC"
+sqldf(query)
+```
+
+```{r}
+query<-"SELECT playerID,name,Batting.yearID,Batting.HR
+FROM Batting INNER JOIN Teams
+ON Batting.teamID=Teams.teamID AND Batting.yearID=Teams.yearID
+WHERE playerID='ruthba01'"
+sqldf(query)
+```
 
