@@ -82,12 +82,16 @@ sqldf(query)
 
 ##Aggregation
 
+This query determines the sum home runs of Babe Ruth.
+
 ```{r}
 query<-"SELECT playerID, sum(HR) FROM Batting
 WHERE playerID= 'ruthba01'
 GROUP BY playerID"
 sqldf(query)
 ```
+
+This query identifies players on any team who have a sum of 600 or less homeruns, specifically ordered in descending order.
 
 ```{r}
 query<-"SELECT playerID, sum(HR) From Batting
@@ -96,6 +100,8 @@ HAVING sum(HR)>600
 ORDER BY sum(HR) DESC"
 sqldf(query)
 ```
+
+In descending order, this query lists players, from any teams, with an average of 30 or less homeruns.
 
 ```{r}
 query<-"SELECT playerID, avg(HR) From Batting
