@@ -122,7 +122,7 @@ $(document).ready(function () {
 
 <div id="filtering-rows-and-columns" class="section level2">
 <h2>Filtering Rows and Columns</h2>
-<p>with SQL you can filter columns with SELECT and rows with WHERE. Lets look at an example using the Lahman baseball database. First, we need to load some packages.</p>
+<p>With SQL you can filter columns with SELECT and rows with WHERE. Lets look at an example using the Lahman baseball database. First, we need to load some packages.</p>
 <pre class="r"><code>library(Lahman)
 library(sqldf)</code></pre>
 <p>Suppose we want to see the homerun totals for the 1927 Yankees. We could write the following:</p>
@@ -155,7 +155,7 @@ sqldf(query)</code></pre>
 ## 23 shockur01   1927    NYA  0
 ## 24 thomamy01   1927    NYA  0
 ## 25  weraju01   1927    NYA  1</code></pre>
-<p>This query identifies players on the NY Yankees team who have hit 40 or more homeruns and had less than 60 strike outs</p>
+<p>This query identifies players on the NY Yankees team who have hit 40 or more homeruns and had less than 60 strike outs.</p>
 <pre class="r"><code>query&lt;-&quot;SELECT playerID,teamID,yearID,HR FROM Batting
 WHERE teamID='NYA' and HR&gt;=40 and SO&lt;60&quot;
 sqldf(query)</code></pre>
@@ -165,7 +165,7 @@ sqldf(query)</code></pre>
 ## 3 gehrilo01    NYA   1934 49
 ## 4 gehrilo01    NYA   1936 49
 ## 5 dimagjo01    NYA   1937 46</code></pre>
-<p>This query broadens the search to players, on any team in the MLB, who have more than 40 homeruns and less than 60 strikeouts</p>
+<p>This query broadens the search to players, on any team in the MLB, who have more than 40 homeruns and less than 60 strikeouts.</p>
 <pre class="r"><code>query&lt;-&quot;SELECT playerID,teamID,yearID,HR,SO FROM Batting
 WHERE HR&gt;40 and SO&lt;60&quot;
 sqldf(query)</code></pre>
@@ -198,7 +198,7 @@ sqldf(query)</code></pre>
 ## 26 bondsba01    SFN   2004 45 41
 ## 27 pujolal01    SLN   2004 46 52
 ## 28 pujolal01    SLN   2006 49 50</code></pre>
-<p>This query retrains the search to players on the Phillies team who have more than 30 homeruns during the 70s</p>
+<p>This query retrains the search to players on the Philadelphia Phillies team who have more than 30 homeruns during the 70s.</p>
 <pre class="r"><code>query&lt;-&quot;SELECT playerID,teamID,yearID,HR FROM Batting
 WHERE teamID='PHI' and HR&gt;30 and yearID&lt;=1979 and yearID&gt;=1970&quot;
 sqldf(query)</code></pre>
@@ -217,7 +217,7 @@ sqldf(query)</code></pre>
 <h1>————————————————————————</h1>
 <div id="ordering-data-outputs" class="section level2">
 <h2>Ordering Data Outputs</h2>
-<p>This query again widens the search to players, in desceding order, who have more than 50 homeruns</p>
+<p>This query again widens the search to players, in desceding order, who have more than 50 homeruns.</p>
 <pre class="r"><code>query&lt;-&quot;SELECT playerID, yearID, teamID,HR FROM Batting
 WHERE HR&gt;50
 ORDER BY HR DESC&quot;
@@ -336,7 +336,7 @@ sqldf(query)</code></pre>
 <h1>————————————————————————</h1>
 <div id="aggregation" class="section level2">
 <h2>Aggregation</h2>
-<p>This query determines the sum home runs of Babe Ruth.</p>
+<p>This query determines the sum of career home runs of Babe Ruth.</p>
 <pre class="r"><code>query&lt;-&quot;SELECT playerID, sum(HR) FROM Batting
 WHERE playerID= 'ruthba01'
 GROUP BY playerID&quot;
@@ -384,6 +384,7 @@ sqldf(query)</code></pre>
 <h1>————————————————————————</h1>
 <div id="joins" class="section level2">
 <h2>Joins</h2>
+<p>The joining of tables is a function that allows us to combine data. Below, is just one example of this where we are looking at the Batting table with the Master table. Specifically, we are looking at Babe Ruth in the Batting table.</p>
 <pre class="r"><code>query&lt;-&quot;SELECT nameFirst,nameLast,yearID,teamID,HR 
 FROM Batting INNER JOIN Master
 ON BATTING.playerID=Master.playerID
@@ -412,6 +413,7 @@ sqldf(query)</code></pre>
 ## 20      Babe     Ruth   1933    NYA 34
 ## 21      Babe     Ruth   1934    NYA 22
 ## 22      Babe     Ruth   1935    BSN  6</code></pre>
+<p>This next query we are, again, combining two tables to determine players full names in which their seasons had 50 or more homeruns. This is done in decending order.</p>
 <pre class="r"><code>query&lt;-&quot;SELECT nameFirst,nameLast,yearID,teamID,HR
 FROM Batting INNER JOIN Master
 ON BATTING.playerID=Master.playerID
@@ -455,6 +457,7 @@ sqldf(query)</code></pre>
 ## 34    Willie      Mays   1955    NY1 51
 ## 35     Cecil   Fielder   1990    DET 51
 ## 36    Andruw     Jones   2005    ATL 51</code></pre>
+<p>Next, we are going to do a query to determine the names of the teams that Babe Ruth his past 22 seasons. It also shows how many homeruns he got each season.</p>
 <pre class="r"><code>query&lt;-&quot;SELECT playerID,name,Batting.yearID,Batting.HR
 FROM Batting INNER JOIN Teams
 ON Batting.teamID=Teams.teamID AND Batting.yearID=Teams.yearID
@@ -483,6 +486,24 @@ sqldf(query)</code></pre>
 ## 20 ruthba01 New York Yankees   1933 34
 ## 21 ruthba01 New York Yankees   1934 22
 ## 22 ruthba01    Boston Braves   1935  6</code></pre>
+<p>Next, we are going to move onto our last query. Like with the pervious examples, we are one again merging two tables: the Salary and Master table. In this query we are identifying players with the first name “Bob” who also had an average salary of one million dollars per each year.</p>
+<pre class="r"><code>query&lt;-&quot;SELECT nameFirst,nameLast,avg(salary)
+FROM Salaries INNER JOIN Master
+ON Salaries.playerID=Master.playerID
+WHERE nameFirst='Bob'
+GROUP BY Salaries.playerID
+HAVING avg(salary)&gt;1000000
+ORDER BY avg(salary) DESC&quot;
+sqldf(query)</code></pre>
+<pre><code>##   nameFirst  nameLast avg(salary)
+## 1       Bob   Wickman     2635812
+## 2       Bob     Welch     1930417
+## 3       Bob     Howry     1804583
+## 4       Bob    Horner     1416667
+## 5       Bob Tewksbury     1288182
+## 6       Bob   Stanley     1067500
+## 7       Bob     Boone     1047580
+## 8       Bob     Ojeda     1035926</code></pre>
 </div>
 </div>
 

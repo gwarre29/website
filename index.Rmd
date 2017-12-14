@@ -5,7 +5,7 @@ output: html_document
 
 ## Filtering Rows and Columns
 
-with SQL you can filter columns with SELECT and rows with WHERE. Lets look at an example using the Lahman baseball database. First, we need to load some packages.
+With SQL you can filter columns with SELECT and rows with WHERE. Lets look at an example using the Lahman baseball database. First, we need to load some packages.
 
 ```{r warning=FALSE, message=FALSE}
 library(Lahman)
@@ -23,7 +23,7 @@ sqldf(query)
 ```
 
 
-This query identifies players on the NY Yankees team who have hit 40 or more homeruns and had less than 60 strike outs
+This query identifies players on the NY Yankees team who have hit 40 or more homeruns and had less than 60 strike outs.
 
 
 ```{r}
@@ -33,7 +33,7 @@ sqldf(query)
 ```
 
 
-This query broadens the search to players, on any team in the MLB, who have more than 40 homeruns and less than 60 strikeouts
+This query broadens the search to players, on any team in the MLB, who have more than 40 homeruns and less than 60 strikeouts.
 
 
 ```{r}
@@ -43,7 +43,7 @@ sqldf(query)
 ```
 
 
-This query retrains the search to players on the Phillies team who have more than 30 homeruns during the 70s
+This query retrains the search to players on the Philadelphia Phillies team who have more than 30 homeruns during the 70s.
 
 
 ```{r}
@@ -56,7 +56,7 @@ sqldf(query)
 
 ## Ordering Data Outputs
 
-This query again widens the search to players, in desceding order, who have more than 50 homeruns
+This query again widens the search to players, in desceding order, who have more than 50 homeruns.
 
 
 ```{r}
@@ -82,7 +82,7 @@ sqldf(query)
 
 ##Aggregation
 
-This query determines the sum home runs of Babe Ruth.
+This query determines the sum of career home runs of Babe Ruth.
 
 ```{r}
 query<-"SELECT playerID, sum(HR) FROM Batting
@@ -116,6 +116,8 @@ sqldf(query)
 
 ## Joins
 
+The joining of tables is a function that allows us to combine data. Below, is just one example of this where we are looking at the Batting table with the Master table. Specifically, we are looking at Babe Ruth in the Batting table.
+
 ```{r}
 query<-"SELECT nameFirst,nameLast,yearID,teamID,HR 
 FROM Batting INNER JOIN Master
@@ -123,6 +125,8 @@ ON BATTING.playerID=Master.playerID
 WHERE Batting.playerID= 'ruthba01'"
 sqldf(query)
 ```
+
+This next query we are, again, combining two tables to determine players full names in which their seasons had 50 or more homeruns. This is done in decending order. 
 
 ```{r}
 query<-"SELECT nameFirst,nameLast,yearID,teamID,HR
@@ -133,6 +137,9 @@ ORDER BY HR DESC"
 sqldf(query)
 ```
 
+Next, we are going to do a query to determine the names of the teams that Babe Ruth his past 22 seasons. It also shows how many homeruns he got each season.
+
+
 ```{r}
 query<-"SELECT playerID,name,Batting.yearID,Batting.HR
 FROM Batting INNER JOIN Teams
@@ -140,4 +147,18 @@ ON Batting.teamID=Teams.teamID AND Batting.yearID=Teams.yearID
 WHERE playerID='ruthba01'"
 sqldf(query)
 ```
+
+Next, we are going to move onto our last query. Like with the pervious examples, we are one again merging two tables: the Salary and Master table. In this query we are identifying players with the first name "Bob" who also had an average salary of one million dollars per each year. 
+
+```{r}
+query<-"SELECT nameFirst,nameLast,avg(salary)
+FROM Salaries INNER JOIN Master
+ON Salaries.playerID=Master.playerID
+WHERE nameFirst='Bob'
+GROUP BY Salaries.playerID
+HAVING avg(salary)>1000000
+ORDER BY avg(salary) DESC"
+sqldf(query)
+```
+
 
